@@ -1,4 +1,7 @@
 .date {
-  padding: 8px;
+  padding: 6px;
   border: 1px solid transparent;
+  background-color: #dcdcdc;
+  border: 1px solid #b0c4de;
+  border-radius: 5px;
 }
