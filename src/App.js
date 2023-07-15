@@ -4,8 +4,6 @@ import { Box } from "@chakra-ui/react";
 import Form from "./Components/Form";
 
 function App() {
-  /*Filter Data*/
-
   return (
     <Box
       display={"flex"}

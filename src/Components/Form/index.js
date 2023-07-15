@@ -4,26 +4,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { Box, Button, Flex, Input, Text } from "@chakra-ui/react";
 
-const Form = ({ onFilter }) => {
+const Form = () => {
   const [deposits, setDeposits] = useState([]);
   const [filteredDeposits, setFilteredDeposits] = useState([]);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
-
-  useEffect(() => {
-    const fetchDeposits = async () => {
-      try {
-        const response = await fetch("http://localhost:8080/transferencia");
-        const data = await response.json();
-        setDeposits(data);
-        setFilteredDeposits(data);
-      } catch (error) {
-        console.error("Error fetching deposits:", error);
-      }
-    };
-    fetchDeposits();
-  }, []);
 
   const handleStartDateChange = (date) => {
     setStartDate(date);
@@ -41,9 +27,27 @@ const Form = ({ onFilter }) => {
     filterDeposits();
   };
 
+  /*Requisição da API*/
+  useEffect(() => {
+    const fetchDeposits = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/transferencia");
+        const data = await response.json();
+        setDeposits(data);
+        setFilteredDeposits(data);
+      } catch (error) {
+        console.error("Error fetching deposits:", error);
+      }
+    };
+    fetchDeposits();
+  }, []);
+  /*Requisição da API*/
+
+  /*Filtragem por data e nome operador*/
   const filterDeposits = () => {
     let filteredList = deposits;
 
+    /*Filter Data*/
     if (startDate && endDate) {
       filteredList = filteredList.filter((deposit) => {
         const depositDate = moment(deposit.data_transferencia);
@@ -53,7 +57,9 @@ const Form = ({ onFilter }) => {
         );
       });
     }
+    /*Filter Data*/
 
+    /*Filter Nome Operador*/
     if (searchTerm && searchTerm.trim() !== "") {
       const searchTermLowercase = searchTerm.toLowerCase();
       filteredList = filteredList.filter(
@@ -64,14 +70,18 @@ const Form = ({ onFilter }) => {
             .includes(searchTermLowercase)
       );
     }
-
     setFilteredDeposits(filteredList);
   };
+  /*Filter Nome Operador*/
+  /*Filtragem por data e nome operador*/
 
+  /*Formatar a data*/
   const formatDate = (date) => {
     return moment(date).format("DD/MM/YYYY");
   };
+  /*Formatar a data*/
 
+  /*CONTEÚDO*/
   return (
     <Box>
       <Box
@@ -97,7 +107,7 @@ const Form = ({ onFilter }) => {
           Depósitos
         </Text>
 
-        <Flex gap="70px" mb={2}>
+        <Flex mb={2}>
           <DatePicker
             selected={startDate}
             onChange={handleStartDateChange}
@@ -170,6 +180,7 @@ const Form = ({ onFilter }) => {
         </Box>
       </Box>
     </Box>
+    /*CONTEÚDO*/
   );
 };
 
